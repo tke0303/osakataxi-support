@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>ライブカメラ</title>
+<!--
+  大阪イベント時刻（iOS アプリ）の乗り場ライブカメラ用のプレーヤー。
+
+  使い方: player.html?v=<YouTube の動画ID>
+
+  アプリの WKWebView からこのページを開き、YouTube の埋め込みプレーヤーで1本だけ再生する。
+  YouTube の埋め込みは「本物の http(s) のページから iframe で読み込まれたとき」しか
+  再生できないため、このページが必要（アプリ内の loadHTMLString / file:// では
+  エラー152-4・153 になる。経緯は OsakaTaxi の docs/RESEARCH_REALTIME.md）。
+
+  入れているスクリプトは YouTube 公式の IFrame Player API だけ。
+  アクセス解析・広告・その他の外部スクリプトは入れない（再生エラーを
+  アプリ側へ伝えるために Player API だけが必要）。
+-->
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; }
+  #player, #player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  #message {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    margin: 0; padding: 24px; color: #fff; text-align: center;
+    font: 15px/1.7 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+  }
+</style>
+</head>
+<body>
+<div id="player"></div>
+<script>
+(function () {
+  "use strict";
+
+  // 受け取るのは動画IDだけ。YouTube の動画IDに使われる文字以外は通さない
+  var videoId = (new URLSearchParams(window.location.search).get("v") || "").trim();
+  var looksValid = /^[A-Za-z0-9_-]{6,24}$/.test(videoId);
+
+  // API が読み込めない・応答しないときに、いつまでも黒い画面にしない
+  var READY_TIMEOUT_MS = 12000;
+  var finished = false;
+
+  // アプリ（WKWebView）へ状態を伝える。アプリ側はこれを見て、
+  // 再生できないときにリンク方式（YouTube を開く）へ切り替える
+  function notify(state, detail) {
+    if (state === "ready" || state === "error") {
+      if (finished) { return; }
+      finished = true;
+    }
+    try {
+      var handlers = window.webkit && window.webkit.messageHandlers;
+      if (handlers && handlers.player) {
+        handlers.player.postMessage({ state: state, detail: detail === undefined ? null : detail });
+      }
+    } catch (ignored) { /* ブラウザで直接開いたときは何もしない */ }
+  }
+
+  function showMessage(text) {
+    var p = document.createElement("p");
+    p.id = "message";
+    p.textContent = text;
+    document.body.appendChild(p);
+  }
+
+  function fail(detail) {
+    notify("error", detail);
+    showMessage("この映像はアプリ内で再生できません。YouTube で開きます。");
+  }
+
+  if (!looksValid) {
+    fail("invalid-video-id");
+    return;
+  }
+
+  window.onYouTubeIframeAPIReady = function () {
+    new window.YT.Player("player", {
+      videoId: videoId,
+      playerVars: {
+        playsinline: 1,   // 全画面に奪われない（運転中の誤操作を減らす）
+        autoplay: 1,
+        rel: 0,
+        modestbranding: 1
+      },
+      events: {
+        onReady: function (event) {
+          notify("ready");
+          try { event.target.playVideo(); } catch (ignored) {}
+        },
+        // 2=動画IDが不正 / 5=HTML5プレーヤーのエラー / 100=動画が無い
+        // 101・150=埋め込みが許可されていない（関西空港の2本がこれ）
+        onError: function (event) { fail(event.data); },
+        onStateChange: function (event) {
+          if (window.YT && event.data === window.YT.PlayerState.PLAYING) {
+            notify("playing");
+          }
+        }
+      }
+    });
+  };
+
+  var script = document.createElement("script");
+  script.src = "https://www.youtube.com/iframe_api";
+  script.onerror = function () { fail("api-load-failed"); };
+  document.head.appendChild(script);
+
+  window.setTimeout(function () {
+    if (!finished) { fail("timeout"); }
+  }, READY_TIMEOUT_MS);
+})();
+</script>
+</body>
+</html>
