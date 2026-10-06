@@ -1,20 +1,171 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>大阪イベント時刻 サポート</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大阪イベント時刻 — サポートページ</title>
 <style>
-  body { margin: 0 auto; padding: 24px; max-width: 42rem; color: #222; background: #fff;
-         font: 16px/1.8 -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; }
-  h1 { font-size: 1.4rem; }
-  footer { margin-top: 3rem; color: #666; font-size: 0.85rem; }
+:root{
+  --bg:#0f0f11; --card:#1c1c1e; --line:#2c2c2e;
+  --text:#e8e8ea; --sub:#8e8e93; --accent:#409EFF; --white:#fff; --warn:#FF9F0A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.85;font-size:16px;
+}
+header{text-align:center;padding:56px 24px 44px;border-bottom:1px solid var(--line)}
+.icon{width:88px;height:88px;margin-bottom:18px}
+header h1{font-size:1.6rem;font-weight:600;margin-bottom:6px}
+header p{color:var(--sub);font-size:.95rem}
+.container{max-width:720px;margin:0 auto;padding:0 20px 80px}
+h2{font-size:1.1rem;font-weight:600;margin:44px 0 14px;color:var(--white)}
+h3{font-size:.98rem;font-weight:600;margin:22px 0 6px}
+p{margin-bottom:14px}
+ul{margin:0 0 14px;padding-left:1.3em}
+li{margin-bottom:7px}
+.card{background:var(--card);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.card h3:first-child{margin-top:0}
+.warn{background:rgba(255,159,10,.12);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.warn strong{color:var(--warn)}
+.venues{list-style:none;padding:0;margin:0}
+.venues li{display:flex;gap:10px;align-items:baseline;margin-bottom:9px}
+.venues .area{flex:none;width:9.5em;color:var(--sub);font-size:.85rem}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;
+  padding:14px 28px;border-radius:12px;font-weight:600;margin:8px 0}
+a{color:var(--accent)}
+footer{border-top:1px solid var(--line);padding:28px 20px 60px;text-align:center;
+  color:var(--sub);font-size:.85rem}
+footer a{margin:0 10px}
+@media (prefers-color-scheme:light){
+  :root{--bg:#fff;--card:#f2f2f7;--line:#d8d8dc;--text:#1c1c1e;--sub:#6c6c70;--accent:#007AE6;--white:#000;--warn:#C77700}
+}
+@media (max-width:420px){
+  .venues li{display:block}
+  .venues .area{width:auto;display:block}
+}
 </style>
 </head>
 <body>
-<h1>大阪イベント時刻</h1>
-<p>大阪の主要会場のイベント開始時刻を一覧できる、タクシー乗務員向けのアプリです。</p>
-<p>利用規約・プライバシーポリシー・お問い合わせは、公開までにこのページに掲載します。</p>
-<footer>© tke0303</footer>
+
+<header>
+  <svg class="icon" viewBox="0 0 88 88" aria-hidden="true">
+    <rect width="88" height="88" rx="20" fill="#007AE6"/>
+    <circle cx="44" cy="44" r="25" fill="none" stroke="#fff" stroke-width="5"/>
+    <path d="M44 27v18h13" fill="none" stroke="#fff" stroke-width="5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <h1>大阪イベント時刻</h1>
+  <p>大阪の主要会場のイベント時刻が一目で分かる ／ タクシー乗務員のためのアプリ</p>
+</header>
+
+<div class="container">
+
+<h2>このアプリについて</h2>
+<p>大阪の主要会場で、その日に何が行われ、<strong>何時に終わるのか</strong>を一覧にします。コンサートや試合が終わる時刻が分かれば、乗り場に人が出てくる時間に合わせて動けます。</p>
+<div class="card">
+  <h3>まもなく終演</h3>
+  <p style="margin:0">ホームのいちばん上に、<strong>2時間以内に終わるもの</strong>を終演時刻の大きい文字で並べます。ユニバーサル・スタジオ・ジャパンと海遊館の閉園、天保山の客船の入港・出港、フェリーの大阪着・大阪発も同じ欄に入ります。</p>
+</div>
+<div class="card">
+  <h3>今日と明日のタイムライン</h3>
+  <p style="margin:0">開演・終演を時刻順に並べます。カレンダーを開けば、先の日の予定も確認できます。</p>
+</div>
+<div class="card">
+  <h3>ウィジェットと通知</h3>
+  <p style="margin:0">ホーム画面とロック画面のウィジェットに、次のイベントの時刻と会場を出します。お気に入りの会場について、開演・終演の前に通知できます。</p>
+</div>
+<div class="card">
+  <h3>交通</h3>
+  <p style="margin:0">鉄道各社の運行情報へのリンクと、タクシー乗り場のライブカメラをまとめています。</p>
+</div>
+
+<div class="warn">
+  <p style="margin:0"><strong>走行中は操作しないでください。</strong>確認は、安全な場所に停車してから行ってください。</p>
+</div>
+
+<h2>対応している会場</h2>
+<p>次の会場のイベントを自動で取得しています。</p>
+<div class="card">
+  <ul class="venues">
+    <li><span class="area">大正・ドーム前</span><span>京セラドーム大阪</span></li>
+    <li><span class="area">大阪城</span><span>大阪城ホール</span></li>
+    <li><span class="area">大阪城公園</span><span>COOL JAPAN PARK OSAKA</span></li>
+    <li><span class="area">朝潮橋・八幡屋公園</span><span>Asueアリーナ大阪</span></li>
+    <li><span class="area">南港・コスモスクエア</span><span>インテックス大阪</span></li>
+    <li><span class="area">中之島</span><span>フェスティバルホール</span></li>
+    <li><span class="area">西本町・四ツ橋</span><span>オリックス劇場</span></li>
+    <li><span class="area">福島</span><span>ザ・シンフォニーホール</span></li>
+    <li><span class="area">なんば</span><span>Zepp Namba</span></li>
+    <li><span class="area">此花・ベイエリア</span><span>Zepp Osaka Bayside</span></li>
+    <li><span class="area">此花・ユニバーサルシティ</span><span>ユニバーサル・スタジオ・ジャパン（営業時間）</span></li>
+    <li><span class="area">天保山</span><span>海遊館（営業時間）</span></li>
+    <li><span class="area">天保山</span><span>客船の入港・出港</span></li>
+    <li><span class="area">大阪南港</span><span>フェリーの大阪着・大阪発（さんふらわあ 別府・志布志航路／名門大洋フェリー）</span></li>
+    <li><span class="area">大阪市内</span><span>大きな行事（花火大会・天神祭・十日戎・大阪マラソンなど）</span></li>
+  </ul>
+</div>
+<p style="color:var(--sub);font-size:.9rem">会場は今後も追加していきます。「この会場も入れてほしい」というご要望は、下記からお知らせください。</p>
+
+<h2>よくある質問</h2>
+
+<h3>時刻は正確ですか</h3>
+<p>各会場の公式サイトで公開されている情報を、1日3回（3時・12時・16時）取得しています。<strong>変更・中止の可能性があるため、必ず公式サイトでご確認ください。</strong>イベントの詳細画面から公式サイトを開けます。</p>
+
+<h3>「〜頃」と書かれた終演時刻は何ですか</h3>
+<p>会場が終演時刻を公表していない公演について、<strong>ジャンル別の目安からアプリが計算した時刻</strong>です。公式の終演時刻とは区別して、薄い色で「〜頃」と表示しています。目安の長さは設定から変えられます。</p>
+
+<h3>「主要」と「すべて」の違いは何ですか</h3>
+<p>「主要」では、次のものを隠します。小さな催しまで見たいときは「すべて」に切り替えてください。切り替えは、ホーム右上のボタンから行えます。</p>
+<ul>
+  <li>収容人数が1,000人未満と<strong>確認できている</strong>ホールの公演（未確認の会場は隠しません）</li>
+  <li>時刻が未発表のもの</li>
+  <li>一部の会場（Asueアリーナ大阪）の、学校行事などアマチュアの催し</li>
+</ul>
+
+<h3>深夜に開くと前日の予定が消えてしまいます</h3>
+<p>消えません。「1日の始まり」の初期値を<strong>4:00</strong>にしてあるため、深夜2時に開いても前日の夜の公演が残ります。隔日勤務で翌朝まで乗務する方に合わせた設定です。設定から0時〜6時の間で変えられます。</p>
+
+<h3>ライブカメラが「現在配信されていません」と出ます</h3>
+<p>配信者側が配信を停止している時間帯です。アプリの不具合ではありません。「チャンネルを開く」から、その時間に配信されているものを確認できます。</p>
+
+<h3>ライブカメラはアプリが撮影しているのですか</h3>
+<p>いいえ。<strong>公益財団法人 大阪タクシーセンター</strong>と<strong>関西国際空港タクシー運営協議会</strong>が YouTube で公開している配信を表示しています。本アプリは撮影も配信もしていません。</p>
+
+<h3>解約したらどうなりますか</h3>
+<p>イベント情報の表示・同期・通知・ウィジェットが停止します。解約は「設定」アプリ →〈自分の名前〉→「サブスクリプション」、または本アプリの設定 →「サブスクリプション」から行えます。次の更新日の24時間前までに解約すると、その先は請求されません。</p>
+
+<h3>無料トライアル中に解約したら料金はかかりますか</h3>
+<p>かかりません。1週間の無料期間が終わる24時間前までに解約してください。</p>
+
+<h3>機種変更したら買い直しですか</h3>
+<p>不要です。同じ Apple ID であれば、設定の「購入を復元」から引き継げます。</p>
+
+<h3>ウィジェットはどう追加しますか</h3>
+<p>iOS の仕様上、アプリから追加することはできません。本アプリの設定 →「ウィジェットの使い方」に手順を載せています。</p>
+
+<h3>通知が届きません</h3>
+<p>次をご確認ください。</p>
+<ul>
+  <li>「設定」アプリ →「大阪イベント時刻」→「通知」が許可されているか</li>
+  <li>本アプリの設定 →「通知」がオンになっているか</li>
+  <li>「お気に入りの会場だけ」がオンのとき、会場をお気に入りに登録しているか（「会場」タブのしおりマークから登録します）</li>
+</ul>
+
+<h3>情報が間違っています</h3>
+<p>イベントの詳細画面にある「<strong>情報が違う</strong>」、または下記のメールからお知らせください。会場名・日付・内容を添えていただけると助かります。</p>
+
+<h2>お問い合わせ</h2>
+<p>ご要望・不具合のご報告は、こちらまでお願いします。</p>
+<a class="btn" href="mailto:tsujikeita1990@gmail.com">tsujikeita1990@gmail.com</a>
+<p style="color:var(--sub);font-size:.9rem">個人で開発・運営しているため、お返事にお時間をいただくことがあります。</p>
+
+</div>
+
+<footer>
+  <a href="privacy.html">プライバシーポリシー</a>・<a href="terms.html">利用規約</a>
+  <p style="margin-top:10px">© 2026 大阪イベント時刻</p>
+</footer>
+
 </body>
 </html>
